@@ -48,9 +48,10 @@ public class ParkingManagement {
 			System.out.println("Booking failed");
 		}
 
-		//Checkoput car c4 from slot 2, slot 2 gets emplty and park car c6 which should get slot 2
+		//Checkout car c4 from slot 2, slot 2 gets emplty and park car c6 which should get slot 2
 		mallParking.checkout(c4);
-
+		Car c6 = new Car("AS-03-A-6923", "violet");
+		
 		if (mallParking.bookParking(c6)) {
 			System.out.println("Booked by " + c6.getRegistration() + " at spot " + c6.getSpot().getSpotNumber());
 		} else {

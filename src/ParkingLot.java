@@ -1,15 +1,25 @@
 import java.util.*;
 
 public class ParkingLot {
+
+	//Maintain a list of all spots in the parking lot
 	private ArrayList<ParkingSpot> spots;
+
+	//A heap to maintain the nearest available parking, for O(1) lookup
 	private PriorityQueue<ParkingSpot> spotsAvailable;
+
+	//A color to spot map to get spots for a particular color
 	private HashMap<String, ArrayList<ParkingSpot>> colorToSpotMap;
+	
 	private int maxCapacity;
 	private int totalCars;
 
+	//Constructors
 	public ParkingLot(int maxCapacity) {
 		this.spots = new ArrayList<>();
 		this.colorToSpotMap = new HashMap<String, ArrayList<ParkingSpot>>();
+		
+		//Heapify wrt spotNumber
 		this.spotsAvailable = new PriorityQueue<ParkingSpot>(new Comparator<ParkingSpot>() {
 			@Override
 			public int compare(ParkingSpot o1, ParkingSpot o2) {
@@ -34,6 +44,8 @@ public class ParkingLot {
 			ParkingSpot newSpot = spotsAvailable.poll();
 			c.setParkingLotAllocated(newSpot);
 			newSpot.setOccupancy(true, c);
+			
+			//add car to colorToSpot map
 			addToMap(c, newSpot);
 			this.totalCars++;
 			System.out.println(c.getRegistration() + " has been parked in parking spot: " + newSpot.getSpotNumber());
@@ -67,7 +79,6 @@ public class ParkingLot {
 	}
 
 	private void removeFromMap(Car c) {
-		// TODO Auto-generated method stub
 		ArrayList<ParkingSpot> spots = new ArrayList<ParkingSpot>();
 		spots = colorToSpotMap.get(c.getColor());
 		if (spots.size() == 1) {
