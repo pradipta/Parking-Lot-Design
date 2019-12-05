@@ -2,24 +2,24 @@ import java.util.*;
 
 public class ParkingLot {
 
-	//Maintain a list of all spots in the parking lot
+	// Maintain a list of all spots in the parking lot
 	private ArrayList<ParkingSpot> spots;
 
-	//A heap to maintain the nearest available parking, for O(1) lookup
+	// A heap to maintain the nearest available parking, for O(1) lookup
 	private PriorityQueue<ParkingSpot> spotsAvailable;
 
-	//A color to spot map to get spots for a particular color
+	// A color to spot map to get spots for a particular color
 	private HashMap<String, ArrayList<ParkingSpot>> colorToSpotMap;
-	
+
 	private int maxCapacity;
 	private int totalCars;
 
-	//Constructors
+	// Constructors
 	public ParkingLot(int maxCapacity) {
 		this.spots = new ArrayList<>();
 		this.colorToSpotMap = new HashMap<String, ArrayList<ParkingSpot>>();
-		
-		//Heapify wrt spotNumber
+
+		// Heapify wrt spotNumber
 		this.spotsAvailable = new PriorityQueue<ParkingSpot>(new Comparator<ParkingSpot>() {
 			@Override
 			public int compare(ParkingSpot o1, ParkingSpot o2) {
@@ -37,30 +37,31 @@ public class ParkingLot {
 	}
 
 	public boolean bookParking(Car c) {
+		
 		if (totalCars == maxCapacity) {
 			System.out.println("Parking full!");
 			return false;
-		} else {
-			ParkingSpot newSpot = spotsAvailable.poll();
-			c.setParkingLotAllocated(newSpot);
-			newSpot.setOccupancy(true, c);
-			
-			//add car to colorToSpot map
-			addToMap(c, newSpot);
-			this.totalCars++;
-			System.out.println(c.getRegistration() + " has been parked in parking spot: " + newSpot.getSpotNumber());
-			return true;
 		}
+		
+		ParkingSpot newSpot = spotsAvailable.poll();
+		c.setParkingLotAllocated(newSpot);
+		newSpot.setOccupancy(true, c);
+		
+		//add car to colorToSpot map
+		addToMap(c, newSpot);
+		this.totalCars++;
+		System.out.println(c.getRegistration() + " has been parked in parking spot: " + newSpot.getSpotNumber());
+		return true;Ï
 	}
 
 	private void addToMap(Car c, ParkingSpot newSpot) {
 		if (this.colorToSpotMap.containsKey(c.getColor())) {
 			colorToSpotMap.get(c.getColor()).add(newSpot);
-		} else {
-			ArrayList<ParkingSpot> newList = new ArrayList<ParkingSpot>();
-			newList.add(newSpot);
-			colorToSpotMap.put(c.getColor(), newList);
+			return;
 		}
+		ArrayList<ParkingSpot> newList = new ArrayList<ParkingSpot>();
+		newList.add(newSpot);
+		colorToSpotMap.put(c.getColor(), newList);
 
 	}
 
